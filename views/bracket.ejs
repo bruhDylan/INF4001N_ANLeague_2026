@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Bracket - African Nations League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: transparent;
+            color: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header h1 {
+            font-family: 'Aclonica', cursive;
+            font-size: 3em;
+            font-weight: 400;
+            margin-bottom: 10px;
+            color: #e0e0e0;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.7;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tournament-status {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #FFD54F;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .bracket-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            position: relative;
+        }
+
+        .bracket-container {
+            display: flex;
+            gap: 40px;
+            background: rgba(15, 20, 40, 0.9);
+            border-radius: 12px;
+            padding: 60px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            width: 100%;
+            justify-content: center;
+        }
+
+        svg.connector-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bracket-stage {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            min-width: 220px;
+        }
+
+        .stage-header {
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Aclonica', cursive;
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 10px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e0e0e0;
+        }
+
+        .quarter-finals {
+            color: white;
+        }
+
+        .semi-finals {
+            color: white;
+        }
+
+        .final {
+            color: #fff;
+            min-width: 260px;
+        }
+
+        .matches-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .match {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(102, 126, 234, 0.15);
+            padding: 16px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .match:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+            background: rgba(102, 126, 234, 0.25);
+        }
+
+        .final .match {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1.5px solid rgba(102, 126, 234, 0.4);
+            padding: 20px;
+        }
+
+        .final .match:hover {
+            background: rgba(102, 126, 234, 0.25);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .team:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(3px);
+        }
+
+        .team.winner {
+            background: rgba(40, 167, 69, 0.3);
+            border-left: 3px solid rgba(40, 167, 69, 0.8);
+            padding-left: 7px;
+        }
+
+        .flag {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .team-name {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .final .team-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .score {
+            width: 38px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .final .score {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 42px;
+            height: 34px;
+            font-size: 15px;
+        }
+
+        .team.winner .score {
+            background: rgba(40, 167, 69, 0.5);
+            border-color: rgba(40, 167, 69, 0.7);
+        }
+
+        .match-status {
+            font-size: 10px;
+            text-align: center;
+            color: rgba(255, 213, 79, 0.7);
+            margin-top: 4px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .match.scheduled {
+            opacity: 0.9;
+        }
+
+        .match.completed {
+            border-color: rgba(40, 167, 69, 0.6);
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 40px;
+            color: #888;
+            width: 100%;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1.5s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-match {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.15);
+            opacity: 0.5;
+        }
+
+        .empty-team {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .empty-flag {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .empty-name {
+            flex: 1;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+        }
+
+        .empty-score {
+            width: 38px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 40px;
+            color: #ff6b6b;
+            width: 100%;
+        }
+
+        .next-match-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 10;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 1400px) {
+            .bracket-container {
+                gap: 30px;
+                padding: 40px 30px;
+            }
+
+            .bracket-stage {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .bracket-wrapper {
+                overflow-x: auto;
+            }
+
+            .bracket-container {
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .bracket-container {
+                padding: 30px 20px;
+                gap: 20px;
+            }
+
+            .bracket-stage {
+                min-width: 180px;
+            }
+
+            .team-name {
+                font-size: 12px;
+            }
+
+            .final .team-name {
+                font-size: 13px;
+            }
+
+            .stage-header {
+                font-size: 11px;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏆 African Nations League</h1>
+        <p>Tournament Bracket - Live Updates</p>
+    </div>
+
+    <div class="controls">
+        <a href="/" class="btn btn-secondary">← Back to Home</a>
+        <a href="/login" class="btn">Admin Dashboard</a>
+        <button class="btn" onclick="loadTournamentData()">🔄 Refresh Bracket</button>
+    </div>
+
+    <div class="tournament-status" id="tournamentStatus">
+        Loading tournament status...
+    </div>
+
+    <div class="bracket-wrapper">
+        <div id="bracketContainer" class="bracket-container">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading tournament bracket...</p>
+            </div>
+        </div>
+        <svg class="connector-lines" id="connectorSvg"></svg>
+    </div>
+
+    <script>
+        // Country flag mapping
+        const countryFlags = {
+            'Nigeria': '🇳🇬',
+            'Ghana': '🇬🇭',
+            'Egypt': '🇪🇬',
+            'Senegal': '🇸🇳',
+            'Morocco': '🇲🇦',
+            'Ivory Coast': '🇨🇮',
+            'Cameroon': '🇨🇲',
+            'Algeria': '🇩🇿',
+            'South Africa': '🇿🇦',
+            'Tunisia': '🇹🇳',
+            'Kenya': '🇰🇪',
+            'Ethiopia': '🇪🇹',
+            'Zambia': '🇿🇲',
+            'DR Congo': '🇨🇩',
+            'Angola': '🇦🇴',
+            'Mali': '🇲🇱',
+            'Burkina Faso': '🇧🇫',
+            'Uganda': '🇺🇬'
+        };
+
+        let nextMatchId = null; // Track next match for highlighting
+
+        // Get country flag emoji
+        function getCountryFlag(countryName) {
+            return countryFlags[countryName] || '🏴';
+        }
+
+        // Format round name for display
+        function formatRoundName(round) {
+            const roundMap = {
+                'quarterfinal': 'Quarter-Finals',
+                'semifinal': 'Semi-Finals',
+                'final': 'Final'
+            };
+            return roundMap[round] || round;
+        }
+
+        // Draw connector lines between stages
+        function drawConnectorLines() {
+            const svg = document.getElementById('connectorSvg');
+            const container = document.getElementById('bracketContainer');
+            
+            if (!svg || !container) return;
+            
+            svg.innerHTML = '';
+            svg.setAttribute('width', container.offsetWidth);
+            svg.setAttribute('height', container.offsetHeight);
+
+            const svgNS = "http://www.w3.org/2000/svg";
+
+            function drawLine(x1, y1, x2, y2, color = 'rgba(102, 126, 234, 0.5)', width = 2) {
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', color);
+                line.setAttribute('stroke-width', width);
+                svg.appendChild(line);
+            }
+
+            function getMatchCenter(matchElement) {
+                if (!matchElement) return null;
+                const rect = matchElement.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                return {
+                    x: rect.right - containerRect.left,
+                    y: rect.top - containerRect.top + rect.height / 2
+                };
+            }
+
+            // Get all match elements
+            const matches = {
+                qf1: document.querySelector('[data-match="qf-1"]'),
+                qf2: document.querySelector('[data-match="qf-2"]'),
+                qf3: document.querySelector('[data-match="qf-3"]'),
+                qf4: document.querySelector('[data-match="qf-4"]'),
+                sf1: document.querySelector('[data-match="sf-1"]'),
+                sf2: document.querySelector('[data-match="sf-2"]'),
+                final: document.querySelector('[data-match="final"]')
+            };
+
+            // QF to SF connections
+            if (matches.qf1 && matches.sf1) {
+                const from = getMatchCenter(matches.qf1);
+                const to = getMatchCenter(matches.sf1);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y);
+            }
+
+            if (matches.qf2 && matches.sf1) {
+                const from = getMatchCenter(matches.qf2);
+                const to = getMatchCenter(matches.sf1);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y);
+            }
+
+            if (matches.qf3 && matches.sf2) {
+                const from = getMatchCenter(matches.qf3);
+                const to = getMatchCenter(matches.sf2);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y);
+            }
+
+            if (matches.qf4 && matches.sf2) {
+                const from = getMatchCenter(matches.qf4);
+                const to = getMatchCenter(matches.sf2);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y);
+            }
+
+            // SF to Final connections
+            if (matches.sf1 && matches.final) {
+                const from = getMatchCenter(matches.sf1);
+                const to = getMatchCenter(matches.final);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y, 'rgba(102, 126, 234, 0.5)', 2.5);
+            }
+
+            if (matches.sf2 && matches.final) {
+                const from = getMatchCenter(matches.sf2);
+                const to = getMatchCenter(matches.final);
+                if (from && to) drawLine(from.x, from.y, to.x, to.y, 'rgba(102, 126, 234, 0.5)', 2.5);
+            }
+        }
+
+        // Determine next scheduled match
+        function getNextMatch(allMatches) {
+            for (const match of allMatches) {
+                if (match.status === 'scheduled') {
+                    return match.id;
+                }
+            }
+            return null;
+        }
+
+        // Load tournament data from admin API
+        async function loadTournamentData() {
+            try {
+                console.log('🔄 Loading tournament data from admin API...');
+                const response = await fetch('/api/admin/dashboard-data');
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('✅ Tournament data loaded successfully');
+                    
+                    // Get next match for highlighting
+                    nextMatchId = getNextMatch(data.matches);
+                    
+                    renderBracket(data.matches);
+                    updateTournamentStatus(data.tournament);
+                    
+                    // Draw connector lines after rendering
+                    setTimeout(drawConnectorLines, 100);
+                } else {
+                    showError('Error Loading Tournament', data.error || 'Unable to load tournament data');
+                }
+            } catch (error) {
+                console.error('❌ Error loading tournament:', error);
+                showError('Connection Error', 'Unable to connect to server');
+            }
+        }
+
+        // Update tournament status
+        function updateTournamentStatus(tournament) {
+            const statusElement = document.getElementById('tournamentStatus');
+            if (statusElement && tournament) {
+                const statusMap = {
+                    'not_started': '⏳ Tournament Not Started',
+                    'quarterfinals': '🎯 Quarter Finals in Progress',
+                    'semifinal': '⚡ Semi Finals in Progress', 
+                    'final': '🏆 Final Match',
+                    'completed': '✅ Tournament Completed'
+                };
+                statusElement.textContent = statusMap[tournament.status] || tournament.status;
+                
+                if (tournament.status === 'completed' && tournament.winner) {
+                    statusElement.textContent += ` - 🎉 ${tournament.winner} Wins!`;
+                }
+            }
+        }
+
+        // Render the tournament bracket
+        function renderBracket(matches) {
+            console.log(`🎯 Rendering bracket with ${matches.length} matches`);
+            
+            const quarters = matches.filter(m => m.round === 'quarterfinal');
+            const semis = matches.filter(m => m.round === 'semifinal');
+            const final = matches.filter(m => m.round === 'final');
+
+            quarters.sort((a, b) => a.matchNumber - b.matchNumber);
+            semis.sort((a, b) => a.matchNumber - b.matchNumber);
+
+            const bracketHTML = `
+                <!-- Quarter Finals Left -->
+                <div class="bracket-stage quarter-finals">
+                    <div class="stage-header">Quarter-Finals</div>
+                    <div class="matches-container">
+                        ${renderMatches(quarters.slice(0, 2), 'qf')}
+                    </div>
+                </div>
+
+                <!-- Semi Finals Left -->
+                <div class="bracket-stage semi-finals">
+                    <div class="stage-header">Semi-Finals</div>
+                    <div class="matches-container">
+                        ${renderMatches(semis.slice(1, 2), 'sf', 2)}
+                        ${semis.slice(1, 2).length === 0 ? renderEmptyMatch('sf-2') : ''}
+                    </div>
+                </div>
+
+                <!-- Final -->
+                <div class="bracket-stage final">
+                    <div class="stage-header">Final</div>
+                    <div class="matches-container">
+                        ${renderMatches(final, 'final')}
+                        ${final.length === 0 ? renderEmptyMatch('final', true) : ''}
+                    </div>
+                </div>
+
+                <!-- Semi Finals Right -->
+                <div class="bracket-stage semi-finals">
+                    <div class="stage-header">Semi-Finals</div>
+                    <div class="matches-container">
+                        ${renderMatches(semis.slice(0, 1), 'sf', 1)}
+                        ${semis.slice(0, 1).length === 0 ? renderEmptyMatch('sf-1') : ''}
+                    </div>
+                </div>
+
+                <!-- Quarter Finals Right -->
+                <div class="bracket-stage quarter-finals">
+                    <div class="stage-header">Quarter-Finals</div>
+                    <div class="matches-container">
+                        ${renderMatches(quarters.slice(2, 4), 'qf')}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('bracketContainer').innerHTML = bracketHTML;
+        }
+
+        // Render matches for a stage
+        function renderMatches(matches, stage, index) {
+            if (matches.length === 0) {
+                return '';
+            }
+
+            return matches.map((match, i) => {
+                const isNextMatch = nextMatchId && match.id === nextMatchId;
+                return `
+                    <div class="match ${match.status || 'scheduled'} ${match.status === 'completed' ? 'completed' : ''}" data-match="${stage}${index || i + 1}" data-match-id="${match.id}">
+                        ${isNextMatch ? '<div class="next-match-indicator">⭐ Next Match</div>' : ''}
+                        <div class="team ${match.winner === match.team1Name ? 'winner' : ''}">
+                            <span class="flag">${getCountryFlag(match.team1Name)}</span>
+                            <span class="team-name">${match.team1Name}</span>
+                            <span class="score">${getMatchScore(match, 'score1')}</span>
+                        </div>
+                        <div class="team ${match.winner === match.team2Name ? 'winner' : ''}">
+                            <span class="flag">${getCountryFlag(match.team2Name)}</span>
+                            <span class="team-name">${match.team2Name}</span>
+                            <span class="score">${getMatchScore(match, 'score2')}</span>
+                        </div>
+                        <div class="match-status">
+                            ${match.status === 'completed' ? 
+                                `✅ ${match.winner} Wins` : 
+                                `⏰ Match ${match.matchNumber}`
+                            }
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get match score safely
+        function getMatchScore(match, scoreType) {
+            if (scoreType === 'score1') {
+                return match.score1 !== undefined ? match.score1 : 
+                       match.team1Score !== undefined ? match.team1Score : '-';
+            } else {
+                return match.score2 !== undefined ? match.score2 : 
+                       match.team2Score !== undefined ? match.team2Score : '-';
+            }
+        }
+
+        // Render empty match placeholder
+        function renderEmptyMatch(dataAttr, isFinal = false) {
+            return `
+                <div class="empty-match" data-match="${dataAttr}">
+                    <div class="empty-team">
+                        <span class="empty-flag"></span>
+                        <span class="empty-name"></span>
+                        <span class="empty-score"></span>
+                    </div>
+                    <div class="empty-team">
+                        <span class="empty-flag"></span>
+                        <span class="empty-name"></span>
+                        <span class="empty-score"></span>
+                    </div>
+                    <div class="match-status">${isFinal ? '🏆 Final - TBD' : '⏳ Match TBD'}</div>
+                </div>
+            `;
+        }
+
+        // Show error message
+        function showError(title, message) {
+            document.getElementById('bracketContainer').innerHTML = `
+                <div class="error-message">
+                    <h3>❌ ${title}</h3>
+                    <p>${message}</p>
+                    <button class="btn" onclick="loadTournamentData()" style="margin-top: 20px;">🔄 Try Again</button>
+                </div>
+            `;
+        }
+
+        // Initialize the tournament bracket
+        loadTournamentData();
+
+        // Auto-refresh every 10 seconds to get live updates
+        setInterval(() => {
+            loadTournamentData();
+            window.addEventListener('resize', drawConnectorLines);
+        }, 10000);
+
+        // Add visual feedback when refreshing
+        let isRefreshing = false;
+        const originalLoadTournamentData = loadTournamentData;
+        loadTournamentData = async function() {
+            if (isRefreshing) return;
+            isRefreshing = true;
+            
+            const refreshBtn = document.querySelector('.btn[onclick="loadTournamentData()"]');
+            if (refreshBtn) {
+                refreshBtn.textContent = '🔄 Loading...';
+                refreshBtn.disabled = true;
+            }
+            
+            await originalLoadTournamentData();
+            
+            if (refreshBtn) {
+                refreshBtn.textContent = '🔄 Refresh Bracket';
+                refreshBtn.disabled = false;
+            }
+            isRefreshing = false;
+        };
+
+        // Redraw lines on resize
+        window.addEventListener('resize', drawConnectorLines);
+    </script>
+</body>
+</html>

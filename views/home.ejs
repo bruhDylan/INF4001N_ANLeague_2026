@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>African Nations League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1f3a 0%, #0f1419 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 3em;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .title-sub {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .view-tournament {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .view-tournament:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .view-tournament::after {
+            content: "›";
+            font-size: 1.3em;
+        }
+
+        .main-section {
+            position: relative;
+        }
+
+        .background-text {
+            position: absolute;
+            font-family: 'Aclonica', sans-serif;
+            font-size: 180px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.08);
+            top: -40px;
+            left: 0;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #8b1538 0%, #c41e3a 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            background: #667eea;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .btn:hover {
+            background: #7c8ff0;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #ffed4a;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Featured Match */
+        .featured-match {
+            background: linear-gradient(135deg, #008751 0%, #005a2b 100%);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .tournament-status {
+            display: inline-block;
+            background: #ffd700;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .match-title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .match-date {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+            margin-bottom: 30px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .teams-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .team-flag {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .team-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .vs {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: bold;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Upcoming Matches Section */
+        .matches-section {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Aclonica', sans-serif;
+            font-size: 1.8em;
+            font-weight: 400;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .section-icon {
+            font-size: 1.5em;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            color: #888;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .tab.active {
+            border-bottom-color: #ffd700;
+            color: #fff;
+        }
+
+        /* Matches Table */
+        .matches-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .matches-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s ease;
+        }
+
+        .matches-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .matches-table td {
+            padding: 20px 15px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .match-team {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .match-flag {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .match-score {
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            min-width: 60px;
+            font-size: 1.2em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .match-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .match-status.scheduled {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .match-status.completed {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .match-round {
+            color: #888;
+            font-size: 0.9em;
+            text-transform: capitalize;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .no-matches {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+            font-size: 1.1em;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .no-matches-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .stat-card {
+            background: rgba(30, 35, 55, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .stat-card h3 {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .stat-value {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 3em;
+            font-weight: 400;
+            color: #ffd700;
+            margin: 10px 0;
+        }
+
+        .stat-details {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-top: 10px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: #4caf50;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .goals-count {
+            color: #ffd700;
+            font-weight: bold;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .background-text {
+                font-size: 100px;
+                top: -20px;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .hero-title {
+                font-size: 2em;
+            }
+            
+            .stat-value {
+                font-size: 2.5em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .teams-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <div class="title">African Nations League</div>
+                <div class="title-sub">Home of African Football Excellence</div>
+            </div>
+            <a href="/bracket" class="view-tournament">View Tournament</a>
+        </div>
+
+        <!-- Main Section -->
+        <div class="main-section">
+            <div class="background-text">ANL</div>
+            
+            <div class="content">
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <h1 class="hero-title">African Nations League</h1>
+                    <p class="hero-subtitle">Experience the future of African football with our revolutionary tournament simulation platform</p>
+                    <div class="btn-group">
+                        <a href="/signup" class="btn btn-primary">Create Your Team</a>
+                        <a href="/bracket" class="btn btn-secondary">View Tournament</a>
+                        <a href="/login" class="btn btn-secondary">Admin Login</a>
+                    </div>
+                </div>
+
+                <!-- Featured Match - Dynamic Content -->
+                <div class="featured-match" id="featuredMatch">
+                    <div class="tournament-status" id="tournamentStatus">Loading Tournament...</div>
+                    <div class="match-title" id="featuredMatchTitle">African Nations League</div>
+                    <div class="match-date" id="featuredMatchDate">Tournament Simulation Platform</div>
+                    
+                    <div class="teams-container" id="featuredTeams">
+                        <div class="team">
+                            <div class="team-flag">🌍</div>
+                            <div class="team-name">African Nations</div>
+                        </div>
+                        <div class="vs">vs</div>
+                        <div class="team">
+                            <div class="team-flag">⚽</div>
+                            <div class="team-name">Football Excellence</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Matches Section -->
+                <div class="matches-section">
+                    <div class="section-header">
+                        <span>Tournament Matches</span>
+                    </div>
+
+                    <div class="tabs-container">
+                        <a href="#" class="tab active" onclick="showTab('upcoming')">Upcoming Matches</a>
+                        <a href="#" class="tab" onclick="showTab('completed')">Completed Matches</a>
+                    </div>
+
+                    <div id="matchesContent">
+                        <div class="no-matches">
+                            <div class="no-matches-icon">⚽</div>
+                            <h3>No Tournament Started</h3>
+                            <p>Waiting for admin to start the African Nations League tournament...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Section -->
+                <div class="matches-section">
+                    <div class="section-header">
+                        <span>Tournament Statistics</span>
+                    </div>
+
+                    <div class="stats-grid" id="statsSection">
+                        <div class="stat-card">
+                            <div class="stat-icon">🥅</div>
+                            <h3>Top Goal Scorer</h3>
+                            <div id="topScorerContent">
+                                <div class="no-matches">
+                                    <div class="no-matches-icon">⚽</div>
+                                    <p>No goals scored yet</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">🏆</div>
+                            <h3>Best Performing Team</h3>
+                            <div id="bestTeamContent">
+                                <div class="no-matches">
+                                    <div class="no-matches-icon">🏅</div>
+                                    <p>No matches played yet</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">📈</div>
+                            <h3>Tournament Stats</h3>
+                            <div id="tournamentStatsContent">
+                                <div class="no-matches">
+                                    <div class="no-matches-icon">📊</div>
+                                    <p>No tournament data</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'upcoming';
+        let matchesData = [];
+        let teamsData = [];
+
+        // Load tournament data
+        async function loadTournamentData() {
+            try {
+                const response = await fetch('/api/admin/dashboard-data');
+                const data = await response.json();
+
+                if (data.success) {
+                    matchesData = data.matches || [];
+                    teamsData = data.teams || [];
+                    updateFeaturedMatch(data.tournament);
+                    updateMatchesList();
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error loading tournament data:', error);
+            }
+        }
+
+        // Update featured match section
+        function updateFeaturedMatch(tournament) {
+            const statusElement = document.getElementById('tournamentStatus');
+            const titleElement = document.getElementById('featuredMatchTitle');
+            const dateElement = document.getElementById('featuredMatchDate');
+            const teamsElement = document.getElementById('featuredTeams');
+
+            if (tournament.status === 'not_started') {
+                statusElement.textContent = 'TOURNAMENT NOT STARTED';
+                statusElement.style.background = '#6c757d';
+                titleElement.textContent = 'African Nations League';
+                dateElement.textContent = 'Waiting for tournament to begin...';
+                teamsElement.innerHTML = `
+                    <div class="team">
+                        <div class="team-flag">🌍</div>
+                        <div class="team-name">African Nations</div>
+                    </div>
+                    <div class="vs">vs</div>
+                    <div class="team">
+                        <div class="team-flag">⚽</div>
+                        <div class="team-name">Football Excellence</div>
+                    </div>
+                `;
+            } else {
+                statusElement.textContent = tournament.status.toUpperCase();
+                statusElement.style.background = '#ffd700';
+                titleElement.textContent = 'African Nations League - ' + tournament.status.charAt(0).toUpperCase() + tournament.status.slice(1);
+                dateElement.textContent = 'Tournament in Progress - ' + tournament.totalTeams + ' Teams';
+                
+                // Show next scheduled match if available
+                const nextMatch = matchesData.find(match => match.status === 'scheduled');
+                if (nextMatch) {
+                    teamsElement.innerHTML = `
+                        <div class="team">
+                            <div class="team-flag">${getFlagEmoji(nextMatch.team1Name)}</div>
+                            <div class="team-name">${nextMatch.team1Name}</div>
+                        </div>
+                        <div class="vs">vs</div>
+                        <div class="team">
+                            <div class="team-flag">${getFlagEmoji(nextMatch.team2Name)}</div>
+                            <div class="team-name">${nextMatch.team2Name}</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Update matches list
+        function updateMatchesList() {
+            const matchesContent = document.getElementById('matchesContent');
+            
+            if (matchesData.length === 0) {
+                matchesContent.innerHTML = `
+                    <div class="no-matches">
+                        <div class="no-matches-icon">⚽</div>
+                        <h3>No Tournament Started</h3>
+                        <p>Waiting for admin to start the African Nations League tournament...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const filteredMatches = matchesData.filter(match => 
+                currentTab === 'upcoming' ? match.status === 'scheduled' : match.status === 'completed'
+            );
+
+            if (filteredMatches.length === 0) {
+                matchesContent.innerHTML = `
+                    <div class="no-matches">
+                        <div class="no-matches-icon">${currentTab === 'upcoming' ? '📅' : '✅'}</div>
+                        <h3>No ${currentTab === 'upcoming' ? 'Upcoming' : 'Completed'} Matches</h3>
+                        <p>${currentTab === 'upcoming' ? 'All matches have been played or tournament not started' : 'No matches completed yet'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            matchesContent.innerHTML = `
+                <table class="matches-table">
+                    <tbody>
+                        ${filteredMatches.map(match => `
+                            <tr>
+                                <td>
+                                    <div class="match-team">
+                                        <div class="match-flag">${getFlagEmoji(match.team1Name)}</div>
+                                        <span>${match.team1Name}</span>
+                                    </div>
+                                </td>
+                                <td class="match-score">
+                                    ${match.status === 'completed' ? `${match.team1Score || 0} - ${match.team2Score || 0}` : 'VS'}
+                                </td>
+                                <td>
+                                    <div class="match-team">
+                                        <span>${match.team2Name}</span>
+                                        <div class="match-flag">${getFlagEmoji(match.team2Name)}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="match-status ${match.status}">
+                                        ${match.status === 'scheduled' ? 'UPCOMING' : 'COMPLETED'}
+                                    </div>
+                                </td>
+                                <td class="match-round">${match.round}</td>
+                                <td>
+                                    ${match.status === 'completed' && match.winner ? 
+                                        `<div style="color: #ffd700; font-weight: 600;">${match.winner}</div>` : 
+                                        '<div style="color: #888;">-</div>'
+                                    }
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Update stats section
+        function updateStats() {
+            updateTopScorer();
+            updateBestTeam();
+            updateTournamentStats();
+        }
+
+        function updateTopScorer() {
+            const topScorerContent = document.getElementById('topScorerContent');
+            
+            // Extract goal scorers from all matches
+            const goalScorers = [];
+            const scorerMap = new Map();
+
+            matchesData.forEach(match => {
+                if (match.goalScorers && Array.isArray(match.goalScorers)) {
+                    match.goalScorers.forEach(goal => {
+                        if (goal.scorer && goal.scorer !== 'Player') {
+                            if (scorerMap.has(goal.scorer)) {
+                                scorerMap.set(goal.scorer, scorerMap.get(goal.scorer) + 1);
+                            } else {
+                                scorerMap.set(goal.scorer, 1);
+                            }
+                        }
+                    });
+                }
+            });
+
+            // Convert to array and sort by goals
+            const sortedScorers = Array.from(scorerMap.entries())
+                .map(([name, goals]) => ({ name, goals, team: getPlayerTeam(name) }))
+                .sort((a, b) => b.goals - a.goals);
+
+            if (sortedScorers.length === 0) {
+                topScorerContent.innerHTML = `
+                    <div class="stat-details">
+                        <p>No goals scored yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const topScorer = sortedScorers[0];
+            topScorerContent.innerHTML = `
+                <div class="stat-value">${topScorer.goals}</div>
+                <div class="stat-details">
+                    <span class="player-name">${topScorer.name}</span><br>
+                    <span>${topScorer.team}</span>
+                </div>
+            `;
+        }
+
+        function updateBestTeam() {
+            const bestTeamContent = document.getElementById('bestTeamContent');
+            const completedMatches = matchesData.filter(m => m.status === 'completed');
+            
+            if (completedMatches.length === 0) {
+                bestTeamContent.innerHTML = `
+                    <div class="stat-details">
+                        <p>No matches played yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calculate team wins
+            const teamWins = {};
+            completedMatches.forEach(match => {
+                if (match.winner) {
+                    teamWins[match.winner] = (teamWins[match.winner] || 0) + 1;
+                }
+            });
+
+            // Find team with most wins
+            const bestTeam = Object.entries(teamWins).reduce((best, [team, wins]) => {
+                return wins > best.wins ? { team, wins } : best;
+            }, { team: '', wins: 0 });
+
+            if (bestTeam.team) {
+                bestTeamContent.innerHTML = `
+                    <div class="stat-value">${bestTeam.wins}</div>
+                    <div class="stat-details">
+                        <span class="team-name">${bestTeam.team}</span><br>
+                        <span>Wins in tournament</span>
+                    </div>
+                `;
+            } else {
+                bestTeamContent.innerHTML = `
+                    <div class="stat-details">
+                        <p>No clear leader yet</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateTournamentStats() {
+            const tournamentStatsContent = document.getElementById('tournamentStatsContent');
+            const completedMatches = matchesData.filter(m => m.status === 'completed');
+            
+            // Calculate total goals from goal scorers
+            let totalGoals = 0;
+            matchesData.forEach(match => {
+                if (match.goalScorers && Array.isArray(match.goalScorers)) {
+                    totalGoals += match.goalScorers.length;
+                }
+            });
+            
+            tournamentStatsContent.innerHTML = `
+                <div class="stat-details">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Matches Played:</strong> ${completedMatches.length}
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Total Goals:</strong> <span class="goals-count">${totalGoals}</span>
+                    </div>
+                    <div>
+                        <strong>Teams Competing:</strong> ${teamsData.length}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper to get player team from goal data
+        function getPlayerTeam(playerName) {
+            for (const match of matchesData) {
+                if (match.goalScorers && Array.isArray(match.goalScorers)) {
+                    const goal = match.goalScorers.find(g => g.scorer === playerName);
+                    if (goal) {
+                        return goal.team;
+                    }
+                }
+            }
+            return 'Unknown Team';
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            updateMatchesList();
+        }
+
+        // Helper function to get flag emoji
+        function getFlagEmoji(countryName) {
+            const flagMap = {
+                'Nigeria': '🇳🇬',
+                'Ghana': '🇬🇭',
+                'Egypt': '🇪🇬',
+                'Senegal': '🇸🇳',
+                'Morocco': '🇲🇦',
+                'Ivory Coast': '🇨🇮',
+                'Cameroon': '🇨🇲',
+                'South Africa': '🇿🇦',
+                'Algeria': '🇩🇿',
+                'Tunisia': '🇹🇳'
+            };
+            return flagMap[countryName] || '🏴';
+        }
+
+        // Initialize
+        loadTournamentData();
+        // Refresh every 30 seconds
+        setInterval(loadTournamentData, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFCON - Team Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Aclonica&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1f3a 0%, #0f1419 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 3em;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+
+        .title-sub {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .view-tournament {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .view-tournament:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .main-section {
+            position: relative;
+        }
+
+        .background-text {
+            position: absolute;
+            font-family: 'Aclonica', sans-serif;
+            font-size: 180px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.08);
+            top: -40px;
+            left: 0;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .squad-creation-card {
+            background: rgba(30, 35, 55, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .squad-title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 2em;
+            font-weight: 400;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .squad-description {
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            background: #667eea;
+            color: white;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            background: #7c8ff0;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 4em;
+            font-weight: 400;
+            color: #fff;
+        }
+
+        /* Players Table */
+        .players-table-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-family: 'Aclonica', sans-serif;
+            font-size: 1.5em;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 35, 55, 0.7);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .players-table thead {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .players-table th {
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .players-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.3s ease;
+        }
+
+        .players-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .players-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .captain-indicator {
+            color: #ffd700;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .player-position {
+            color: #b0b0b0;
+            font-size: 0.9em;
+        }
+
+        .rating-cell {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .natural-position {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .other-position {
+            color: #b0b0b0;
+        }
+
+        /* Matches Section */
+        .matches-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .match-card {
+            background: rgba(30, 35, 55, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .match-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .teams-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .team-flag {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .team-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .team-name {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .team-full-name {
+            font-size: 1em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .score-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .vs-text {
+            color: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .background-text {
+                font-size: 100px;
+                top: -20px;
+            }
+            
+            .title {
+                font-size: 2em;
+            }
+            
+            .stat-value {
+                font-size: 2.5em;
+            }
+            
+            .stats-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .teams-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <div class="title" id="teamTitle">TEAM</div>
+                <div class="title-sub" id="teamSubtitle">Team Dashboard</div>
+            </div>
+            <a href="/bracket" class="view-tournament">View Tournament</a>
+        </div>
+
+        <!-- Main Section -->
+        <div class="main-section">
+            <div class="background-text" id="backgroundCountry">TEAM</div>
+            
+            <div class="content">
+                <!-- Squad Status Section -->
+                <div id="squadStatusSection"></div>
+
+                <!-- Stats Section -->
+                <div class="stats-section" id="statsSection" style="display: none;">
+                    <div class="stat-box">
+                        <div class="stat-label">Team Rating</div>
+                        <div class="stat-value" id="teamRating">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Players</div>
+                        <div class="stat-value" id="playerCount">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Goals</div>
+                        <div class="stat-value" id="goalsScored">0</div>
+                    </div>
+                </div>
+
+                <!-- Matches Section -->
+                <div id="matchesSection"></div>
+
+                <!-- Players Table Section -->
+                <div class="players-table-section" id="playersSection" style="display: none;">
+                    <div class="section-title">Full Squad - Player Ratings</div>
+                    <div id="playersTableContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let currentUser = null;
+    let currentTeam = null;
+    let currentPlayers = [];
+    let teamMatches = [];
+
+    // Load user and team data on page load
+    // In representative-dashboard.ejs, update loadDashboardData():
+    async function loadDashboardData() {
+        try {
+            console.log('🔄 Starting dashboard data load...');
+            
+            const userData = localStorage.getItem('user');
+            if (!userData) {
+                console.log('❌ No user data found in localStorage');
+                showNoSquad('Please log in again');
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+            console.log('👤 Current user:', currentUser);
+
+            // FIX: Handle both country and countryName fields
+            const userCountry = currentUser.countryName || currentUser.country;
+            if (!userCountry) {
+                console.log('❌ User has no country assigned');
+                showNoSquad('Please register a country first');
+                return;
+            }
+
+            console.log('🌍 User country:', userCountry);
+
+            // Load team data
+            console.log('📡 Fetching team data for user:', currentUser.uid);
+            const response = await fetch(`/api/auth/my-team?userId=${currentUser.uid}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('📊 Team API response:', data);
+
+            if (data.success) {
+                if (data.team && data.team.squadCreated) {
+                    currentTeam = data.team;
+                    currentPlayers = data.players || [];
+                    
+                    console.log('✅ Team data loaded:', currentTeam);
+                    console.log('✅ Players loaded:', currentPlayers.length);
+                    
+                    updateTeamInfo();
+                    displayTeamStats();
+                    await loadTeamMatches();
+                    displayPlayersTable();
+                } else {
+                    console.log('ℹ️ No squad created yet, showing creation option');
+                    showCreateSquadOption();
+                }
+            } else {
+                console.log('❌ API returned success: false');
+                showCreateSquadOption();
+            }
+
+        } catch (error) {
+            console.error('❌ Error loading dashboard:', error);
+            showNoSquad('Error loading dashboard: ' + error.message);
+        }
+    }
+
+    function updateTeamInfo() {
+        if (!currentTeam) return;
+
+        const teamName = currentTeam.name || (currentUser.countryName || currentUser.country) || 'Your Team';
+        console.log('🏆 Setting team name to:', teamName);
+        
+        document.getElementById('teamTitle').textContent = teamName.toUpperCase();
+        document.getElementById('teamSubtitle').textContent = 'Team Dashboard';
+        document.getElementById('backgroundCountry').textContent = teamName.toUpperCase().replace(/ /g, '');
+    }
+
+    function displayTeamStats() {
+        document.getElementById('statsSection').style.display = 'grid';
+        document.getElementById('teamRating').textContent = currentTeam.rating || '0';
+        document.getElementById('playerCount').textContent = currentPlayers.length;
+        
+        const totalGoals = currentPlayers.reduce((sum, player) => sum + (player.goalsScored || 0), 0);
+        document.getElementById('goalsScored').textContent = totalGoals;
+    }
+
+    function displayPlayersTable() {
+        const playersSection = document.getElementById('playersSection');
+        const playersTableContent = document.getElementById('playersTableContent');
+        
+        if (!currentPlayers || currentPlayers.length === 0) {
+            playersTableContent.innerHTML = `
+                <div class="match-card" style="text-align: center;">
+                    <div style="font-size: 1.2em; color: #888; margin-bottom: 10px;">No Players in Squad</div>
+                    <div style="color: #667eea;">Generate a squad to see your players here</div>
+                </div>
+            `;
+            playersSection.style.display = 'block';
+            return;
+        }
+
+        console.log('🎯 Displaying players table with', currentPlayers.length, 'players');
+
+        const tableHTML = `
+            <table class="players-table">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Position</th>
+                        <th>GK</th>
+                        <th>DF</th>
+                        <th>MD</th>
+                        <th>AT</th>
+                        <th>Overall</th>
+                        <th>Goals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${currentPlayers.map(player => {
+                        const ratings = player.ratings || { GK: 0, DF: 0, MD: 0, AT: 0 };
+                        const overall = ratings[player.naturalPosition] || 75;
+                        const isCaptain = player.isCaptain === true;
+                        
+                        return `
+                            <tr>
+                                <td>
+                                    <div class="player-name">
+                                        ${player.name}
+                                        ${isCaptain ? '<span class="captain-indicator">(C)</span>' : ''}
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="player-position">${player.naturalPosition}</span>
+                                </td>
+                                <td class="rating-cell ${player.naturalPosition === 'GK' ? 'natural-position' : 'other-position'}">
+                                    ${ratings.GK}
+                                </td>
+                                <td class="rating-cell ${player.naturalPosition === 'DF' ? 'natural-position' : 'other-position'}">
+                                    ${ratings.DF}
+                                </td>
+                                <td class="rating-cell ${player.naturalPosition === 'MD' ? 'natural-position' : 'other-position'}">
+                                    ${ratings.MD}
+                                </td>
+                                <td class="rating-cell ${player.naturalPosition === 'AT' ? 'natural-position' : 'other-position'}">
+                                    ${ratings.AT}
+                                </td>
+                                <td class="rating-cell natural-position">
+                                    ${overall}
+                                </td>
+                                <td class="rating-cell">
+                                    ${player.goalsScored || 0}
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+
+        playersTableContent.innerHTML = tableHTML;
+        playersSection.style.display = 'block';
+    }
+
+    async function loadTeamMatches() {
+        try {
+            if (!currentTeam || !currentTeam.id) {
+                console.log('❌ No team ID available for matches');
+                displayNoMatches();
+                return;
+            }
+
+            console.log('🔍 Loading matches for team ID:', currentTeam.id);
+
+            // Use the country code (which is the team ID) to query matches
+            const response = await fetch(`/api/admin/team-matches/${currentTeam.id}`);
+            const data = await response.json();
+
+            if (data.success && data.matches) {
+                teamMatches = data.matches;
+                console.log(`✅ Found ${teamMatches.length} matches`);
+                displayTeamMatches();
+            } else {
+                console.log('⚠️ No matches found or API error');
+                displayNoMatches();
+            }
+        } catch (error) {
+            console.error('❌ Error loading team matches:', error);
+            displayNoMatches();
+        }
+    }
+
+    function displayNoMatches() {
+        const matchesSection = document.getElementById('matchesSection');
+        matchesSection.innerHTML = `
+            <div class="section-title" style="margin-top: 60px;">Team Matches</div>
+            <div class="match-card" style="text-align: center;">
+                <div style="font-size: 1.2em; color: #888; margin-bottom: 10px;">No Matches Found</div>
+                <div style="color: #667eea;">Tournament hasn't started yet</div>
+            </div>
+        `;
+    }
+
+    function displayTeamMatches() {
+        const matchesSection = document.getElementById('matchesSection');
+        
+        if (teamMatches.length === 0) {
+            displayNoMatches();
+            return;
+        }
+
+        let matchesHTML = '<div class="section-title" style="margin-top: 60px;">Team Matches</div><div class="matches-grid">';
+
+        teamMatches.forEach(match => {
+            const isHome = match.team1 === currentTeam.id;
+            const opponent = isHome ? match.team2Name : match.team1Name;
+            const teamScore = isHome ? (match.score1 || '-') : (match.score2 || '-');
+            const opponentScore = isHome ? (match.score2 || '-') : (match.score1 || '-');
+            const isCompleted = match.status === 'completed';
+            const isWinner = isCompleted && match.winner === currentTeam.name;
+            
+            matchesHTML += `
+                <div class="match-card">
+                    <div class="match-header">
+                        <span>${currentTeam.name}</span>
+                        <span style="color: #666;">·</span>
+                        <span>AFCON ${match.round.toUpperCase()}</span>
+                        ${isCompleted ? 
+                            `<span style="color: ${isWinner ? '#4caf50' : '#f44336'}; margin-left: auto;">
+                                ${isWinner ? 'WON' : 'LOST'}
+                            </span>` : 
+                            '<span style="color: #ff9800; margin-left: auto;">UPCOMING</span>'
+                        }
+                    </div>
+                    
+                    <div class="teams-container">
+                        <div class="team">
+                            <div class="team-flag">🏳️</div>
+                            <div class="team-info">
+                                <div class="team-name">${currentTeam.name}</div>
+                                <div class="team-full-name">${currentTeam.name}</div>
+                            </div>
+                        </div>
+                        <div class="score-container">
+                            <span>${teamScore}</span>
+                            <span class="vs-text">:</span>
+                            <span>${opponentScore}</span>
+                        </div>
+                        <div class="team">
+                            <div class="team-info">
+                                <div class="team-name">${opponent}</div>
+                                <div class="team-full-name">${opponent}</div>
+                            </div>
+                            <div class="team-flag">🏳️</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 15px; color: #888; font-size: 0.9em;">
+                        Round: ${match.round} | Status: ${isCompleted ? 'Completed' : 'Scheduled'}
+                    </div>
+                </div>
+            `;
+        });
+
+        matchesHTML += '</div>';
+        matchesSection.innerHTML = matchesHTML;
+    }
+
+    function showCreateSquadOption() {
+        const squadStatusSection = document.getElementById('squadStatusSection');
+        const countryName = currentUser.country || 'Your Team';
+        
+        squadStatusSection.innerHTML = `
+            <div class="squad-creation-card">
+                <div class="squad-title">Create Your ${countryName} Squad</div>
+                <p class="squad-description">Generate a 23-player squad with authentic African player names to compete in the African Nations League.</p>
+                <div class="button-group">
+                    <button class="btn" onclick="generateSquad()">Generate 23-Player Squad</button>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('statsSection').style.display = 'none';
+        document.getElementById('playersSection').style.display = 'none';
+        document.getElementById('matchesSection').innerHTML = '';
+    }
+
+    function showNoSquad(message) {
+        const squadStatusSection = document.getElementById('squadStatusSection');
+        squadStatusSection.innerHTML = `
+            <div class="squad-creation-card">
+                <div style="color: #888; font-size: 1.2em;">${message}</div>
+            </div>
+        `;
+        document.getElementById('statsSection').style.display = 'none';
+        document.getElementById('playersSection').style.display = 'none';
+    }
+
+    async function generateSquad() {
+        // FIX: Get the country CODE, not the name
+        const userCountry = currentUser.countryCode || (currentUser.countryName || currentUser.country);
+        if (!currentUser || !userCountry) {
+            alert('Please register a country first');
+            return;
+        }
+
+        if (!confirm('This will generate a new 23-player squad. Continue?')) {
+            return;
+        }
+
+        try {
+            console.log('🚀 Generating squad for country code:', userCountry);
+            
+            const response = await fetch('/api/auth/create-squad', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: currentUser.uid,
+                    countryCode: userCountry // This should be the 3-letter code (MAR, NGA, etc.)
+                })
+            });
+
+            const data = await response.json();
+            console.log('📦 Create squad response:', data);
+
+            if (data.success) {
+                alert(`Squad created successfully! Team rating: ${data.rating}`);
+                loadDashboardData();
+            } else {
+                alert('Error creating squad: ' + data.error);
+            }
+
+        } catch (error) {
+            console.error('Error generating squad:', error);
+            alert('Error generating squad: ' + error.message);
+        }
+    }
+    async function loadDashboardData() {
+        try {
+            console.log('🔄 Starting dashboard data load...');
+            
+            const userData = localStorage.getItem('user');
+            if (!userData) {
+                console.log('❌ No user data found in localStorage');
+                showNoSquad('Please log in again');
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+            console.log('👤 Current user:', currentUser);
+
+            // FIX: Handle both country and countryName fields
+            const userCountry = currentUser.countryName || currentUser.country;
+            const userCountryCode = currentUser.countryCode;
+            console.log('🌍 User country:', userCountry);
+            console.log('🔤 User country code:', userCountryCode);
+
+            if (!userCountry) {
+                console.log('❌ User has no country assigned');
+                showNoSquad('Please register a country first');
+                return;
+            }
+
+            // Load team data
+            console.log('📡 Fetching team data for user:', currentUser.uid);
+            const response = await fetch(`/api/auth/my-team?userId=${currentUser.uid}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('📊 Team API response:', data);
+
+            if (data.success) {
+                if (data.team && data.team.squadCreated) {
+                    currentTeam = data.team;
+                    currentPlayers = data.players || [];
+                    
+                    console.log('✅ Team data loaded:', currentTeam);
+                    console.log('✅ Players loaded:', currentPlayers.length);
+                    console.log('✅ Squad created:', currentTeam.squadCreated);
+                    
+                    updateTeamInfo();
+                    displayTeamStats();
+                    await loadTeamMatches();
+                    displayPlayersTable();
+                } else {
+                    console.log('ℹ️ No squad created yet, showing creation option');
+                    console.log('ℹ️ Team exists but squadCreated is false:', data.team);
+                    showCreateSquadOption();
+                }
+            } else {
+                console.log('❌ API returned success: false');
+                showCreateSquadOption();
+            }
+
+        } catch (error) {
+            console.error('❌ Error loading dashboard:', error);
+            showNoSquad('Error loading dashboard: ' + error.message);
+        }
+    }
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+    }
+
+    // Initialize dashboard
+    console.log('🚀 Initializing representative dashboard...');
+    loadDashboardData();
+    </script>
+</body>
+</html>
